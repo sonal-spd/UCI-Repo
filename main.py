@@ -28,16 +28,24 @@ def predict(request : Disease):
     slope = request.slope
     ca = request.ca
     thal = request.thal
-    
     scale = pd.read_pickle('model/scale.pkl')
+    temp = []
     columns = ['age', 'resting_bp', 'chol', 'max_heart_rate', 'ST_depression']
-    data[columns] = scale.fit_transform(data[columns])
-    
+    for i in columns:
+        temp.append(data[i])
+    var = [temp]
+    new_data = scale.transform (var)
+
+    age = new_data[0][0]
+    resting_bp = new_data[0][1]
+    chol = new_data[0][2]
+    max_heart_rate = new_data[0][3]
+    ST_depression = new_data[0][4]
     # for python 3.8
     model = pd.read_pickle('model/model.pkl')
     
-    result = model.predict([[age,sex,chest_pain_type,resting_bp,chol,fbs,resting_electrocardio_results,max_heart_rate,exang,ST_depression,slope,ca,thal]])
-    classification = result[0]
+    target = model.predict([[age,sex,chest_pain_type,resting_bp,chol,fbs,resting_electrocardio_results,max_heart_rate,exang,ST_depression,slope,ca,thal]])
+    classification = target[0]
     data['target'] = classification
     return data
     # return data
