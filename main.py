@@ -47,7 +47,10 @@ def predict(request : Disease):
     target = model.predict([[age,sex,chest_pain_type,resting_bp,chol,fbs,resting_electrocardio_results,max_heart_rate,exang,ST_depression,slope,ca,thal]])
     classification = target[0]
     data['target'] = classification
-    return data
+    if (data['target']==0):
+        return "No heart disease"
+    else:
+        return "Heart Disease"
     # return data
 
 
